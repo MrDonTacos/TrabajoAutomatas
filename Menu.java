@@ -36,6 +36,7 @@ public class Menu extends JFrame {
 	FileOutputStream salida;
 	private JPanel contentPane;
 
+	//Método auxiliar para poder abrir archivos txt
 	private String AbrirArchivo(File archivo) {
 		String documento="";
 		try
@@ -55,6 +56,7 @@ public class Menu extends JFrame {
 		return documento;
 	}
 	
+	//Método auxiliar para poder Guardar el archivom transforma el archivo en byte para poder ser guardado
 	public String GuardarArchivo(File archivo, String documento)
 	{
 		String mensaje = null;
@@ -70,6 +72,7 @@ public class Menu extends JFrame {
 		return mensaje;
 	}
 	
+	//Se obtiene el último elemento que no contenga una palabra
 	private int findLastNonWordChar (String text, int index)
 	{
 		while(--index >= 0)
@@ -82,6 +85,8 @@ public class Menu extends JFrame {
 		return index;
 	}
 	
+	//Se obtiene obtiene la primera no letra del programa, se utiliza la expresión \\W para ello
+	// \\W = Nonword 
 	private int findFirstNonWordChar (String text, int index)
 	{
 		while(index < text.length())
@@ -133,9 +138,14 @@ public class Menu extends JFrame {
 		contentPane.add(btnBorrar);
 		
 		final StyleContext cont = StyleContext.getDefaultStyleContext();
+		
+		//Se generan los colores de los atributos del texto
 		final AttributeSet attr = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.BLUE);
 		final AttributeSet attrGreen = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.GREEN);
 		final AttributeSet attrBlack = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, Color.BLACK);
+		
+		//Se lee la entrada del teclado, se lee la frase que se inserta y mediante expresiones regulares se determina
+		//Si pertenece a una variable, a un signo de puntuación o al texto normal
 		DefaultStyledDocument document = new DefaultStyledDocument() 
 		{
 			public void insertString(int offset, String str, AttributeSet a) throws BadLocationException
@@ -169,6 +179,8 @@ public class Menu extends JFrame {
 			}
 		};
 		JTextPane textPane = new JTextPane(document);
+		
+		//Se genera el evento para guardar el archivo con terminación txt con un event listener
 		btnGuardar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -192,6 +204,8 @@ public class Menu extends JFrame {
 			}
 		});
 		
+		
+		//Se genera evento para guardar elemento con un event listener
 		btnBorrar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
