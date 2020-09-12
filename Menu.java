@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.AttributeSet;
@@ -23,6 +24,8 @@ import java.awt.event.KeyEvent;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Menu extends JFrame {
 	
@@ -120,10 +123,12 @@ public class Menu extends JFrame {
 		StyleContext context = new StyleContext();
 		
 		JButton btnGuardar = new JButton("GUARDAR");
+		
 		btnGuardar.setBounds(324, 293, 117, 25);
 		contentPane.add(btnGuardar);
 		
-		JButton btnBorrar = new JButton("BORRAR");
+		JButton btnBorrar = new JButton("ABRIR");
+		
 		btnBorrar.setBounds(195, 293, 117, 25);
 		contentPane.add(btnBorrar);
 		
@@ -164,6 +169,48 @@ public class Menu extends JFrame {
 			}
 		};
 		JTextPane textPane = new JTextPane(document);
+		btnGuardar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(seleccionar.showDialog(null,  "Guardar") == JFileChooser.APPROVE_OPTION)
+				{
+					archivo=seleccionar.getSelectedFile();
+					if(archivo.getName().endsWith("txt"))
+					{
+						String Documento = textPane.getText();
+						String mensaje = GuardarArchivo(archivo, Documento);
+						if(mensaje!=null) {
+							JOptionPane.showMessageDialog(null, mensaje);
+						}
+						else {
+							JOptionPane.showMessageDialog(null, "Archivo no compatible");
+						}
+					}else {
+						JOptionPane.showMessageDialog(null, "Guardar Documento de texto");
+					}
+				}
+			}
+		});
+		
+		btnBorrar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(seleccionar.showDialog(null, "Abrir")==JFileChooser.APPROVE_OPTION)
+				{
+					archivo = seleccionar.getSelectedFile();
+					if(archivo.canRead())
+					{
+						if(archivo.getName().endsWith("txt"))
+						{
+							String documento = AbrirArchivo(archivo);
+							textPane.setText(documento);
+						}else {
+							JOptionPane.showMessageDialog(null, "Archivo no compatible");
+						}
+					}
+				}
+			}
+		});
 		textPane.setBounds(42, 12, 360, 232);
 		contentPane.add(textPane);
 	}
